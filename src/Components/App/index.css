@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&family=Playball&family=Recursive:wght@300&display=swap');
+body {
+  margin: 0;
+  font-family: 'Lexend Deca';
+  background-color:#E5E5E5 ;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+body {
+ -webkit-font-smoothing: antialiased;
+}
+
