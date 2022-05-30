@@ -11,7 +11,7 @@ function Home() {
     const [create, setCreate] = react.useState(false);
 
     useEffect(() => {
-        if (localStorage) {
+        if (localStorage.form) {
             const strol = localStorage.getItem("form");
             const alou = JSON.parse(strol);
             setForm({ email: alou.email, id: alou.id, name: alou.name, image: alou.image, token: alou.token })
