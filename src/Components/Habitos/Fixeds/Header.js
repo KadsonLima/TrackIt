@@ -11,7 +11,7 @@ function Header(){
 
     useEffect(()=>{
 
-        if (localStorage) {
+        if (localStorage.form) {
             const strol = localStorage.getItem("form");
             const alou = JSON.parse(strol);
             setImage(alou.image)
