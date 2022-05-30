@@ -15,7 +15,6 @@ function Hoje() {
 
     const date = new Date();
     const dayName = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
-
     useEffect(() => {
         
         if (form.token) {
@@ -29,34 +28,37 @@ function Hoje() {
             })
         }
         
-    }, [feito, form.token]);
+    }, [tarefa]);
 
     
   
     function habitoFeito(habito){
+
         const config = {
             headers: { "Authorization": `Bearer ${form.token}` }
         }
         if(habito.done){
             axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/'+habito.id+'/uncheck', {}, config)   
             .then(e=>{
-                console.log(tarefa)
+                setTarefa(tarefa-1)
 
            })
         }else{
             axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/'+habito.id+'/check',{}, config)   
                  .then(e=>{
-
+                    setTarefa(tarefa+1)
                 })
         }
+
+       
     }
 
-    console.log("hoje", (feito).toFixed(2))
-    
+
+  
+
     const writeHabitos = (hoje ? hoje.map((e, index) => {
-        if(e.done){
-            setFeito(feito+1/hoje.length)
-        }
+
+
 
         return <Habito key={index}>
             <div className="dias" >
