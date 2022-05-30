@@ -7,14 +7,11 @@ export default function habitoCreate({ Token, setCreate, create}) {
     const [habform, setHabForm] = react.useState({dia:'', days:''});
 
 function cadasHabito(event) {
-    
-
     const config = {
         headers: {
             "Authorization": `Bearer ${Token}`
         }
     }
-
     let body = {
         name: habform.dia,
         days: habform.days
@@ -36,12 +33,6 @@ function cadasHabito(event) {
         }else{
             setHabForm({ ...habform, days: [...habform.days, e] })
         }
-        
-
-            /*if (habform['days'].includes(parseInt(e.target.name))) {
-                
-            }
-            */
         
         
     }

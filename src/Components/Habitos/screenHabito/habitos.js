@@ -1,12 +1,14 @@
-import react, { useContext, useEffect } from "react";
+import react, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { FormContext } from '../../Context/FormContext';
-import HabCreate from './Functions/habitoCreate';
+import { FormContext } from '../../../Context/FormContext';
+import HabCreate from './components/habitoCreate';
 import axios from "axios";
+import WriteHabit from '../screenHabito/components/writeHabito';
 
 function Home() {
 
     const { form, setForm, habitos, setHabitos } = useContext(FormContext);
+    const [create, setCreate] = react.useState(false);
 
     useEffect(() => {
         if (localStorage) {
@@ -25,33 +27,17 @@ function Home() {
                 console.log("teste")
             })
         }
-    }, [form.token]);
+    }, [form.token, create]);
 
     const Token = form.token;
 
-    console.log(habitos)
-    const [create, setCreate] = react.useState(false);
-    const dias = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
-
-
-
-    const writeHabitos = (habitos ? habitos.map((e, index) => {
-        return <Habito key={index}>
-            <span>{e.name}</span>
-            <div className="dias" >
-                {dias.map((dia, index) => {
-                    return <Dia key={index} contem={(e.days.includes(index))} >{dia}</Dia>
-                })}
-            </div>
-        </Habito>
-    }) : nulo)
 
     return (
         <>
             <Content >
                 <div className="title" back='#00000ff'><span>Meus hábitos</span><button onClick={() => { setCreate(!create) }}>+</button></div>
                 {create ? <HabCreate Token={Token} setCreate={setCreate} create={create} /> : ''}
-                {writeHabitos}
+                <WriteHabit/>
             </Content>
         </>
     )
@@ -63,7 +49,6 @@ export default Home;
 
 
 
-const nulo = (<span>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</span>)
 
 
 
@@ -104,38 +89,4 @@ const Content = styled.div`
 
 
 
-const Habito = styled.div`
-    background-color:white;
-    width:100%;
-    height:90px;
-    padding:15px;
-    border-radius: 5px;
-    margin-bottom:10px;
 
-    span{
-        font-size: 19.976px;
-        line-height: 25px;
-        color: #666666;
-    }
-    .dias{
-        margin-top:8px;
-        display:flex;
-    }
-
-
-`
-const Dia = styled.div`
-
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        width:30px;
-        height:30px;
-        border: 1px solid #D5D5D5;
-        border-radius: 5px;
-        color: ${props => !props.contem ? '#DBDBDB' : 'white'};
-        background-color: ${props => props.contem ? '#DBDBDB' : 'white'};
-        margin-right: 4px;
-
-
-`

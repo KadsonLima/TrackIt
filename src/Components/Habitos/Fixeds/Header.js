@@ -38,6 +38,7 @@ export default Header;
 
 const Cabecalho = styled.div`
     position:fixed;
+    z-index: 1;
     top:0;
     left:0;
     width:100%;

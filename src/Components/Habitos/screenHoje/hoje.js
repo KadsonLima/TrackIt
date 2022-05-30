@@ -1,19 +1,21 @@
 import react, { useContext, useEffect } from "react";
 import styled from "styled-components";
-import { FormContext } from '../../Context/FormContext';
+import { FormContext } from '../../../Context/FormContext';
 import axios from "axios";
-import Vector from '../../assets/vector.png';
-import dayjs from "dayjs";
+import Vector from '../../../assets/vector.png';
 
 
 function Hoje() {
 
-    const { form, habitos, feito ,setFeito } = useContext(FormContext);
+    const { form, feito , setFeito} = useContext(FormContext);
 
     const [hoje, setHoje] = react.useState(null);
-    const [reto, setReto] = react.useState(null);
+    const [tarefa, setTarefa] = react.useState([]);
 
-    console.log("token", form.token)
+
+    const date = new Date();
+    const dayName = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+
     useEffect(() => {
         
         if (form.token) {
@@ -21,41 +23,41 @@ function Hoje() {
                 headers: { "Authorization": `Bearer ${form.token}` }
             }).then(e => {
                 setHoje((e.data));
-                console.log("foias", e.data)
+                console.log("foias", hoje)
             }).catch(() => {
                 console.log("tomou no cu")
             })
         }
-    }, [form.token, setReto]);
+        
+    }, [feito, form.token]);
 
+    
+  
     function habitoFeito(habito){
         const config = {
             headers: { "Authorization": `Bearer ${form.token}` }
         }
-        console.log(habito)
         if(habito.done){
             axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/'+habito.id+'/uncheck', {}, config)   
             .then(e=>{
-               
+                console.log(tarefa)
+
            })
         }else{
             axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/'+habito.id+'/check',{}, config)   
                  .then(e=>{
+
                 })
         }
-        att()
     }
 
-    function att(){
-        let atividades = 0;
-        hoje.map(e=>{
-            if(e.done){ atividades++}
-        })
-        console.log(feito)
-        setFeito((atividades/hoje.length)*100)
-    }
-
+    console.log("hoje", (feito).toFixed(2))
+    
     const writeHabitos = (hoje ? hoje.map((e, index) => {
+        if(e.done){
+            setFeito(feito+1/hoje.length)
+        }
+
         return <Habito key={index}>
             <div className="dias" >
                 <span>{e.name}</span>
@@ -64,19 +66,29 @@ function Hoje() {
                     <span>Seu recorde: {e.currentSequence} dias</span>
                 </div>
             </div>
-            <Buttao back={e.done} onClick={()=>{habitoFeito(e)}}><img src={Vector}/></Buttao>
+            <Buttao back={e.done}  onClick={()=>{habitoFeito(e)}}><img alt={Vector} src={Vector}/></Buttao>
         </Habito>
     }) : nulo);
+
+    const porcenta = (feito === 0)?(
+        <span>Nenhum hábito concluído ainda</span>
+    ):(<span style={{color:'rgb(143, 197, 73)'}}>{feito.toFixed(0)}% dos hábitos concluídos</span>)
+
 
     return (
         <>
             <Content >
-                <div className="title">{ }</div>
+                <div className="title">
+                    <span>{dayName[date.getDay()]}, {('0' + date.getDate()).slice(-2)}/{('0' + date.getMonth()).slice(-2)}</span>
+                    {porcenta}
+                </div>
                 {writeHabitos}
             </Content>
         </>
     )
 
+
+    
 }
 
 
@@ -89,27 +101,29 @@ const nulo = (<span>Você não tem nenhum hábito cadastrado ainda. Adicione um 
 
 
 const Content = styled.div`
-    margin: 70px 0;
+    margin-top: 70px;
+    margin-bottom: 110px;
     background-color: #E5E5E5;
     width:100%;
     height: 100vh;
     padding: 28px 18px;
 
     .title{
-        background-color: ${(props) => props.back};
         display:flex;
+        flex-direction: column;
         justify-content:space-between;
-        align-items:center;
-        font-size:22.98px;
-        color: #126BA5;
+        
         margin-bottom:20px;
-
-        span:last-child{
-            font-family: 'Lexend Deca';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 17.976px;
+        span:first-child{
+            font-size:22.98px;
+            color: #126BA5;
         }
+        span:last-child{
+            font-size: 17.976px;
+            line-height: 22px;
+            color: #BABABA;
+        }
+
     }
 `
 
@@ -153,7 +167,7 @@ const Buttao = styled.button`
 
     width: 64px;
     height: 64px;
-    background: ${props=>props.back? 'green':'#EBEBEB'};
+    background: ${props=>props.back? '#8FC549':'#EBEBEB'};
     border: 1px solid #E7E7E7;
     border-radius: 5px;
     img{
