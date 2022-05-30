@@ -11,6 +11,7 @@ function Hoje() {
 
     const [hoje, setHoje] = react.useState(null);
     const [tarefa, setTarefa] = react.useState([]);
+    const [farray, setfArray] = react.useState([]);
 
 
     const date = new Date();
@@ -54,10 +55,18 @@ function Hoje() {
     }
 
 
-  
 
     const writeHabitos = (hoje ? hoje.map((e, index) => {
 
+        if(e.done && !(farray.includes(e.id))){
+            setfArray([...farray, e.id]);
+            setFeito(farray.length/hoje.length*100);
+
+        }else if((!e.done) && (farray.includes(e.id))){
+            setfArray([farray.filter(e=>e !== e.id)])
+             setFeito(farray.length/hoje.length*100);
+
+        }
 
 
         return <Habito key={index}>
@@ -68,7 +77,7 @@ function Hoje() {
                     <span>Seu recorde: {e.currentSequence} dias</span>
                 </div>
             </div>
-            <Buttao back={e.done}  onClick={()=>{habitoFeito(e)}}><img alt={Vector} src={Vector}/></Buttao>
+            <Buttao back={(e.done)}  onClick={()=>{habitoFeito(e)}}><img alt={Vector} src={Vector}/></Buttao>
         </Habito>
     }) : nulo);
 
