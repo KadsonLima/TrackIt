@@ -7,7 +7,7 @@ import axios from "axios";
 import {ThreeDots} from "react-loader-spinner";
 
 function Login() {
-    const { habitos, setHabitos } = useContext(FormContext);
+    const { habitos, setHabitos, form, setForm } = useContext(FormContext);
 
     const navigate = useNavigate();
 
@@ -44,6 +44,7 @@ function Login() {
         setTimeout(()=>{
             axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', login)
             .then(e => {
+                setForm(e.data)
                 navigate('/habitos');
             }).catch(e => {
                 alert("deu erro", e)
